@@ -1,0 +1,2666 @@
+<html>
+<head>
+<title>ASE atomic visualization</title>
+<link rel="stylesheet" type="text/css"
+ href="https://www.x3dom.org/x3dom/release/x3dom.css">
+</link>
+<script type="text/javascript"
+ src="https://www.x3dom.org/x3dom/release/x3dom.js">
+</script>
+<style>
+* {
+    box-sizing: border-box;
+  }
+ 
+/* Create two unequal columns that floats next to each other */
+.column {
+  float: left;
+  padding: 1px;
+}
+
+.left {
+  width: 20%;
+}
+
+.right {
+  width: 80%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#x3dase{
+    top:0;
+    width: 80%;
+    height: 80%;
+    border:2px solid darkorange;        
+}
+
+#sidebar{
+    top:0;
+    border:2px solid darkorange;        
+}
+
+
+/* Sidebar component containers */
+.ui-widget-header
+{
+  background-color: lightblue;
+  font-size: 12px;
+
+}
+.sidebarComponent
+{
+    padding:2px 2px 2px 2px;
+    font-size: medium;
+}
+
+.button {
+  background-color: #4CAF50; /* Green */
+  border: 1px solid green;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 10px;
+  cursor: pointer;
+  /* float: left; */
+}
+
+</style></head>
+<body>
+<div class = "column left", id = "sidebar">
+
+    <div class="ui-widget-header">Model</div>
+    <div class="sidebarComponent">
+        <form style="text-align:left;">
+            <button type="button" class = "button" onclick="spacefilling('b2b4a1bf')">Ball</button>
+            <button type="button" class = "button" onclick="ballstick('b2b4a1bf')">Ball-and-stick</button>
+            <button type="button" class = "button" onclick="polyhedra('b2b4a1bf')">Polyhedra</button>
+        </form>
+    </div>
+    <div class="ui-widget-header">Label</div>
+    <div class="sidebarComponent">
+        <form style="text-align:left;">
+            <button type="button" class = "button" onclick="none('b2b4a1bf')">None</button>
+            <button type="button" class = "button" onclick="element('b2b4a1bf')"> Element</button>
+            <button type="button" class = "button" onclick="index('b2b4a1bf')">Index</button>
+        </form>
+    </div>
+
+    <div class="ui-widget-header">Camera</div>
+    <div class="sidebarComponent">
+        <form style="text-align:left;">
+            <button type="button" class = "button" onclick="document.getElementById('camera_ortho_b2b4a1bf').setAttribute('set_bind','true');">Orthographic</button>
+            <button type="button" class = "button" onclick="document.getElementById('camera_persp_b2b4a1bf').setAttribute('set_bind','true');">Perspective</button>
+        </form>
+    </div>
+
+    <div class="ui-widget-header">View</div>
+    <div class="sidebarComponent">
+        <form style="text-align:left;">
+            <button type="button" class = "button" onclick="set_viewpoint('b2b4a1bf', 'top_pos', 'top_ori')">Top</button>
+            <button type="button" class = "button" onclick="set_viewpoint('b2b4a1bf', 'front_pos', 'front_ori')">Front</button>
+            <button type="button" class = "button" onclick="set_viewpoint('b2b4a1bf', 'right_pos', 'right_ori')">Right</button>
+        </form>
+    </div>
+
+    <div class="ui-widget-header">Measurement</div>
+    <div class="sidebarComponent">
+        <form style="text-align:left; font-size: 12px;">
+            <table style="font-size:1.0em;">
+                <td id="lastonMouseoverObject_kind_b2b4a1bf">-</td> <td id="lastonMouseoverObject_index_b2b4a1bf">-</td> 
+                <td id="position_b2b4a1bf">-</td></tr>
+            </table>
+            <p id="measure_b2b4a1bf"></p>
+            <p id="error_b2b4a1bf"></p>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    document.onkeyup = function(e) {
+      var x = event.which || event.keyCode;
+      var label = 0;
+        if (x == 49) {
+            set_viewpoint('b2b4a1bf', 'top_pos', 'top_ori');
+        } else if (x == 50) {
+            set_viewpoint('b2b4a1bf', 'front_pos', 'front_ori');
+        } else if (x == 51) {
+            set_viewpoint('b2b4a1bf', 'right_pos', 'right_ori');
+        } else if (x == 83) {
+          spacefilling('b2b4a1bf');
+        } else if (x == 66) {
+          ballstick('b2b4a1bf');
+        } else if (x == 80) {
+          polyhedra('b2b4a1bf');
+        } else if (x == 52) {
+            element('b2b4a1bf');
+        } else if (x == 53) {
+            index('b2b4a1bf');
+        } else if (x == 54) {
+            none('b2b4a1bf');
+        }
+      };
+    </script>
+ <div class = "column right" > 
+   <X3D id = "x3dase" PrimitiveQuality = "high" > 
+     <Scene > 
+       <Transform id = "t_camera_persp_b2b4a1bf" rotation = "0 0 0 0" > 
+         <Viewpoint id = "camera_persp_b2b4a1bf" position = "15.074455775202605 9.07145138162309 108.95828773978344" centerOfRotation = "15.074455775202605 9.07145138162309 18.35796021329053" orientation = "0 0 0 0" description = "camera" > 
+         </Viewpoint> 
+       </Transform> 
+       <Transform id = "t_camera_ortho_b2b4a1bf" rotation = "0 0 0 0" > 
+         <OrthoViewpoint id = "camera_ortho_b2b4a1bf" position = "15.074455775202605 9.07145138162309 108.95828773978344" centerOfRotation = "15.074455775202605 9.07145138162309 18.35796021329053" orientation = "0 0 0 0" fieldOfView = "-30.200109175497637 -30.200109175497637 30.200109175497637 30.200109175497637" description = "camera" > 
+         </OrthoViewpoint> 
+       </Transform> 
+       <Group onclick = "handleGroupClick(event, 'b2b4a1bf')" > 
+         <Switch whichChoice = "-1" > 
+           <Shape DEF = "as_C" id = "as_C_b2b4a1bf" > 
+             <Appearance DEF = "app_C" > 
+               <Material name = "am_b2b4a1bf" diffuseColor = "0.565 0.565 0.565" transparency = "0.01" > 
+               </Material> 
+             </Appearance> 
+             <Sphere DEF = "asp_C" radius = "0.76" > 
+             </Sphere> 
+           </Shape> 
+         </Switch> 
+         <Transform DEF = "at_0_b2b4a1bf" uuid = "b2b4a1bf" id = "at_0_b2b4a1bf" radius = "0.76" name = "at_b2b4a1bf" translation = "1.31 2.2 23.51" scale = "1 1 1" > 
+           <Shape kind = "C" index = "0" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_C" > 
+             </Appearance> 
+             <Sphere USE = "asp_C" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_66_b2b4a1bf" uuid = "b2b4a1bf" id = "at_66_b2b4a1bf" radius = "0.76" name = "at_b2b4a1bf" translation = "6.56 11.3 23.51" scale = "1 1 1" > 
+           <Shape kind = "C" index = "66" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_C" > 
+             </Appearance> 
+             <Sphere USE = "asp_C" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_132_b2b4a1bf" uuid = "b2b4a1bf" id = "at_132_b2b4a1bf" radius = "0.76" name = "at_b2b4a1bf" translation = "11.82 2.2 23.51" scale = "1 1 1" > 
+           <Shape kind = "C" index = "132" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_C" > 
+             </Appearance> 
+             <Sphere USE = "asp_C" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_198_b2b4a1bf" uuid = "b2b4a1bf" id = "at_198_b2b4a1bf" radius = "0.76" name = "at_b2b4a1bf" translation = "17.07 11.3 23.51" scale = "1 1 1" > 
+           <Shape kind = "C" index = "198" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_C" > 
+             </Appearance> 
+             <Sphere USE = "asp_C" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Switch whichChoice = "-1" > 
+           <Shape DEF = "as_O" id = "as_O_b2b4a1bf" > 
+             <Appearance DEF = "app_O" > 
+               <Material name = "am_b2b4a1bf" diffuseColor = "1.0 0.051 0.051" transparency = "0.01" > 
+               </Material> 
+             </Appearance> 
+             <Sphere DEF = "asp_O" radius = "0.66" > 
+             </Sphere> 
+           </Shape> 
+         </Switch> 
+         <Transform DEF = "at_17_b2b4a1bf" uuid = "b2b4a1bf" id = "at_17_b2b4a1bf" radius = "0.66" name = "at_b2b4a1bf" translation = "1.31 2.18 24.68" scale = "1 1 1" > 
+           <Shape kind = "O" index = "17" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_O" > 
+             </Appearance> 
+             <Sphere USE = "asp_O" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_83_b2b4a1bf" uuid = "b2b4a1bf" id = "at_83_b2b4a1bf" radius = "0.66" name = "at_b2b4a1bf" translation = "6.57 11.27 24.68" scale = "1 1 1" > 
+           <Shape kind = "O" index = "83" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_O" > 
+             </Appearance> 
+             <Sphere USE = "asp_O" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_149_b2b4a1bf" uuid = "b2b4a1bf" id = "at_149_b2b4a1bf" radius = "0.66" name = "at_b2b4a1bf" translation = "11.82 2.18 24.68" scale = "1 1 1" > 
+           <Shape kind = "O" index = "149" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_O" > 
+             </Appearance> 
+             <Sphere USE = "asp_O" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_215_b2b4a1bf" uuid = "b2b4a1bf" id = "at_215_b2b4a1bf" radius = "0.66" name = "at_b2b4a1bf" translation = "17.07 11.27 24.68" scale = "1 1 1" > 
+           <Shape kind = "O" index = "215" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_O" > 
+             </Appearance> 
+             <Sphere USE = "asp_O" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Switch whichChoice = "-1" > 
+           <Shape DEF = "as_Ni" id = "as_Ni_b2b4a1bf" > 
+             <Appearance DEF = "app_Ni" > 
+               <Material name = "am_b2b4a1bf" diffuseColor = "0.314 0.816 0.314" transparency = "0.01" > 
+               </Material> 
+             </Appearance> 
+             <Sphere DEF = "asp_Ni" radius = "1.24" > 
+             </Sphere> 
+           </Shape> 
+         </Switch> 
+         <Transform DEF = "at_1_b2b4a1bf" uuid = "b2b4a1bf" id = "at_1_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "3.94 6.82 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "1" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_2_b2b4a1bf" uuid = "b2b4a1bf" id = "at_2_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "6.57 2.27 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "2" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_3_b2b4a1bf" uuid = "b2b4a1bf" id = "at_3_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "9.19 0.75 19.27" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "3" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_4_b2b4a1bf" uuid = "b2b4a1bf" id = "at_4_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "3.93 6.79 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "4" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_5_b2b4a1bf" uuid = "b2b4a1bf" id = "at_5_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "6.57 5.3 19.3" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "5" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_6_b2b4a1bf" uuid = "b2b4a1bf" id = "at_6_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "6.56 2.25 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "6" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_7_b2b4a1bf" uuid = "b2b4a1bf" id = "at_7_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "6.57 8.34 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "7" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_8_b2b4a1bf" uuid = "b2b4a1bf" id = "at_8_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "9.19 6.82 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "8" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_9_b2b4a1bf" uuid = "b2b4a1bf" id = "at_9_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "1.31 2.24 21.75" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "9" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_10_b2b4a1bf" uuid = "b2b4a1bf" id = "at_10_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "11.82 8.34 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "10" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_11_b2b4a1bf" uuid = "b2b4a1bf" id = "at_11_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "9.19 3.79 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "11" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_12_b2b4a1bf" uuid = "b2b4a1bf" id = "at_12_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "3.94 3.79 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "12" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_13_b2b4a1bf" uuid = "b2b4a1bf" id = "at_13_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "11.82 5.3 19.26" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "13" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_14_b2b4a1bf" uuid = "b2b4a1bf" id = "at_14_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "3.94 0.75 19.27" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "14" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_15_b2b4a1bf" uuid = "b2b4a1bf" id = "at_15_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "1.31 2.27 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "15" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_16_b2b4a1bf" uuid = "b2b4a1bf" id = "at_16_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "9.17 6.79 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "16" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_67_b2b4a1bf" uuid = "b2b4a1bf" id = "at_67_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "9.19 15.92 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "67" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_68_b2b4a1bf" uuid = "b2b4a1bf" id = "at_68_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "11.82 11.37 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "68" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_69_b2b4a1bf" uuid = "b2b4a1bf" id = "at_69_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "14.44 9.84 19.27" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "69" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_70_b2b4a1bf" uuid = "b2b4a1bf" id = "at_70_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "9.18 15.89 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "70" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_71_b2b4a1bf" uuid = "b2b4a1bf" id = "at_71_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "11.82 14.4 19.3" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "71" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_72_b2b4a1bf" uuid = "b2b4a1bf" id = "at_72_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "11.81 11.35 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "72" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_73_b2b4a1bf" uuid = "b2b4a1bf" id = "at_73_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "11.82 17.44 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "73" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_74_b2b4a1bf" uuid = "b2b4a1bf" id = "at_74_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "14.44 15.92 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "74" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_75_b2b4a1bf" uuid = "b2b4a1bf" id = "at_75_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "6.56 11.34 21.75" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "75" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_76_b2b4a1bf" uuid = "b2b4a1bf" id = "at_76_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "17.07 17.44 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "76" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_77_b2b4a1bf" uuid = "b2b4a1bf" id = "at_77_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "14.44 12.89 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "77" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_78_b2b4a1bf" uuid = "b2b4a1bf" id = "at_78_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "9.19 12.89 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "78" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_79_b2b4a1bf" uuid = "b2b4a1bf" id = "at_79_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "17.07 14.4 19.26" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "79" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_80_b2b4a1bf" uuid = "b2b4a1bf" id = "at_80_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "9.19 9.84 19.27" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "80" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_81_b2b4a1bf" uuid = "b2b4a1bf" id = "at_81_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "6.57 11.37 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "81" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_82_b2b4a1bf" uuid = "b2b4a1bf" id = "at_82_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "14.43 15.88 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "82" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_133_b2b4a1bf" uuid = "b2b4a1bf" id = "at_133_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "14.44 6.82 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "133" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_134_b2b4a1bf" uuid = "b2b4a1bf" id = "at_134_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "17.07 2.27 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "134" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_135_b2b4a1bf" uuid = "b2b4a1bf" id = "at_135_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "19.69 0.75 19.27" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "135" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_136_b2b4a1bf" uuid = "b2b4a1bf" id = "at_136_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "14.43 6.79 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "136" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_137_b2b4a1bf" uuid = "b2b4a1bf" id = "at_137_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "17.07 5.3 19.3" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "137" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_138_b2b4a1bf" uuid = "b2b4a1bf" id = "at_138_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "17.06 2.25 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "138" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_139_b2b4a1bf" uuid = "b2b4a1bf" id = "at_139_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "17.07 8.34 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "139" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_140_b2b4a1bf" uuid = "b2b4a1bf" id = "at_140_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "19.7 6.82 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "140" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_141_b2b4a1bf" uuid = "b2b4a1bf" id = "at_141_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "11.82 2.24 21.75" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "141" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_142_b2b4a1bf" uuid = "b2b4a1bf" id = "at_142_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "22.32 8.34 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "142" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_143_b2b4a1bf" uuid = "b2b4a1bf" id = "at_143_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "19.7 3.79 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "143" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_144_b2b4a1bf" uuid = "b2b4a1bf" id = "at_144_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "14.44 3.79 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "144" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_145_b2b4a1bf" uuid = "b2b4a1bf" id = "at_145_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "22.32 5.3 19.26" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "145" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_146_b2b4a1bf" uuid = "b2b4a1bf" id = "at_146_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "14.44 0.75 19.27" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "146" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_147_b2b4a1bf" uuid = "b2b4a1bf" id = "at_147_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "11.82 2.27 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "147" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_148_b2b4a1bf" uuid = "b2b4a1bf" id = "at_148_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "19.68 6.79 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "148" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_199_b2b4a1bf" uuid = "b2b4a1bf" id = "at_199_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "19.7 15.92 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "199" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_200_b2b4a1bf" uuid = "b2b4a1bf" id = "at_200_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "22.32 11.37 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "200" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_201_b2b4a1bf" uuid = "b2b4a1bf" id = "at_201_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "24.95 9.84 19.27" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "201" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_202_b2b4a1bf" uuid = "b2b4a1bf" id = "at_202_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "19.68 15.89 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "202" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_203_b2b4a1bf" uuid = "b2b4a1bf" id = "at_203_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "22.33 14.4 19.3" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "203" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_204_b2b4a1bf" uuid = "b2b4a1bf" id = "at_204_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "22.31 11.35 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "204" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_205_b2b4a1bf" uuid = "b2b4a1bf" id = "at_205_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "22.32 17.44 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "205" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_206_b2b4a1bf" uuid = "b2b4a1bf" id = "at_206_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "24.95 15.92 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "206" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_207_b2b4a1bf" uuid = "b2b4a1bf" id = "at_207_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "17.07 11.34 21.75" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "207" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_208_b2b4a1bf" uuid = "b2b4a1bf" id = "at_208_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "27.57 17.44 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "208" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_209_b2b4a1bf" uuid = "b2b4a1bf" id = "at_209_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "24.95 12.89 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "209" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_210_b2b4a1bf" uuid = "b2b4a1bf" id = "at_210_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "19.7 12.89 17.14" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "210" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_211_b2b4a1bf" uuid = "b2b4a1bf" id = "at_211_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "27.57 14.4 19.26" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "211" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_212_b2b4a1bf" uuid = "b2b4a1bf" id = "at_212_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "19.7 9.84 19.27" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "212" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_213_b2b4a1bf" uuid = "b2b4a1bf" id = "at_213_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "17.07 11.37 15.0" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "213" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_214_b2b4a1bf" uuid = "b2b4a1bf" id = "at_214_b2b4a1bf" radius = "1.24" name = "at_b2b4a1bf" translation = "24.93 15.88 21.45" scale = "1 1 1" > 
+           <Shape kind = "Ni" index = "214" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Ni" > 
+             </Appearance> 
+             <Sphere USE = "asp_Ni" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Switch whichChoice = "-1" > 
+           <Shape DEF = "as_Zn" id = "as_Zn_b2b4a1bf" > 
+             <Appearance DEF = "app_Zn" > 
+               <Material name = "am_b2b4a1bf" diffuseColor = "0.49 0.502 0.69" transparency = "0.01" > 
+               </Material> 
+             </Appearance> 
+             <Sphere DEF = "asp_Zn" radius = "1.22" > 
+             </Sphere> 
+           </Shape> 
+         </Switch> 
+         <Transform DEF = "at_18_b2b4a1bf" uuid = "b2b4a1bf" id = "at_18_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "11.82 3.79 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "18" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_19_b2b4a1bf" uuid = "b2b4a1bf" id = "at_19_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "11.81 6.8 21.85" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "19" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_20_b2b4a1bf" uuid = "b2b4a1bf" id = "at_20_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "6.56 0.73 19.42" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "20" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_21_b2b4a1bf" uuid = "b2b4a1bf" id = "at_21_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.13 6.06 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "21" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_22_b2b4a1bf" uuid = "b2b4a1bf" id = "at_22_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.5 6.06 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "22" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_23_b2b4a1bf" uuid = "b2b4a1bf" id = "at_23_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.49 4.58 21.78" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "23" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_24_b2b4a1bf" uuid = "b2b4a1bf" id = "at_24_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.89 3.03 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "24" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_25_b2b4a1bf" uuid = "b2b4a1bf" id = "at_25_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.51 3.02 19.48" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "25" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_26_b2b4a1bf" uuid = "b2b4a1bf" id = "at_26_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "11.82 6.82 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "26" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_27_b2b4a1bf" uuid = "b2b4a1bf" id = "at_27_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.5 9.07 21.86" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "27" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_28_b2b4a1bf" uuid = "b2b4a1bf" id = "at_28_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.86 4.53 21.81" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "28" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_29_b2b4a1bf" uuid = "b2b4a1bf" id = "at_29_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "9.2 5.28 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "29" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_30_b2b4a1bf" uuid = "b2b4a1bf" id = "at_30_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "9.13 2.23 21.76" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "30" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_31_b2b4a1bf" uuid = "b2b4a1bf" id = "at_31_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.12 7.58 19.43" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "31" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_32_b2b4a1bf" uuid = "b2b4a1bf" id = "at_32_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.88 4.55 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "32" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_33_b2b4a1bf" uuid = "b2b4a1bf" id = "at_33_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.5 4.55 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "33" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_34_b2b4a1bf" uuid = "b2b4a1bf" id = "at_34_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.51 7.58 19.43" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "34" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_35_b2b4a1bf" uuid = "b2b4a1bf" id = "at_35_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.12 9.07 21.86" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "35" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_36_b2b4a1bf" uuid = "b2b4a1bf" id = "at_36_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "14.44 8.34 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "36" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_37_b2b4a1bf" uuid = "b2b4a1bf" id = "at_37_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "0.0 0.0 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "37" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_38_b2b4a1bf" uuid = "b2b4a1bf" id = "at_38_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.88 1.52 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "38" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_39_b2b4a1bf" uuid = "b2b4a1bf" id = "at_39_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "2.63 0.0 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "39" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_40_b2b4a1bf" uuid = "b2b4a1bf" id = "at_40_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "3.94 2.27 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "40" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_41_b2b4a1bf" uuid = "b2b4a1bf" id = "at_41_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "2.63 1.52 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "41" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_42_b2b4a1bf" uuid = "b2b4a1bf" id = "at_42_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "5.25 1.52 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "42" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_43_b2b4a1bf" uuid = "b2b4a1bf" id = "at_43_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "6.57 3.79 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "43" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_44_b2b4a1bf" uuid = "b2b4a1bf" id = "at_44_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "1.31 0.76 19.47" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "44" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_45_b2b4a1bf" uuid = "b2b4a1bf" id = "at_45_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "2.62 3.02 19.48" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "45" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_46_b2b4a1bf" uuid = "b2b4a1bf" id = "at_46_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "5.24 3.03 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "46" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_47_b2b4a1bf" uuid = "b2b4a1bf" id = "at_47_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "5.19 9.03 21.77" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "47" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_48_b2b4a1bf" uuid = "b2b4a1bf" id = "at_48_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.92 9.03 21.77" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "48" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_49_b2b4a1bf" uuid = "b2b4a1bf" id = "at_49_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "3.99 2.22 21.76" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "49" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_50_b2b4a1bf" uuid = "b2b4a1bf" id = "at_50_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "2.63 4.55 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "50" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_51_b2b4a1bf" uuid = "b2b4a1bf" id = "at_51_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "5.25 4.55 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "51" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_52_b2b4a1bf" uuid = "b2b4a1bf" id = "at_52_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "6.57 6.82 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "52" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_53_b2b4a1bf" uuid = "b2b4a1bf" id = "at_53_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "5.25 6.06 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "53" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_54_b2b4a1bf" uuid = "b2b4a1bf" id = "at_54_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.88 6.06 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "54" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_55_b2b4a1bf" uuid = "b2b4a1bf" id = "at_55_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "9.19 8.34 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "55" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_56_b2b4a1bf" uuid = "b2b4a1bf" id = "at_56_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "3.94 5.28 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "56" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_57_b2b4a1bf" uuid = "b2b4a1bf" id = "at_57_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "5.26 7.58 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "57" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_58_b2b4a1bf" uuid = "b2b4a1bf" id = "at_58_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.87 7.58 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "58" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_59_b2b4a1bf" uuid = "b2b4a1bf" id = "at_59_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "2.63 4.58 21.78" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "59" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_60_b2b4a1bf" uuid = "b2b4a1bf" id = "at_60_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "5.26 4.53 21.81" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "60" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_61_b2b4a1bf" uuid = "b2b4a1bf" id = "at_61_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "6.55 6.78 21.8" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "61" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_62_b2b4a1bf" uuid = "b2b4a1bf" id = "at_62_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.88 0.0 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "62" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_63_b2b4a1bf" uuid = "b2b4a1bf" id = "at_63_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "9.19 2.27 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "63" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_64_b2b4a1bf" uuid = "b2b4a1bf" id = "at_64_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.5 1.52 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "64" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_65_b2b4a1bf" uuid = "b2b4a1bf" id = "at_65_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "5.25 0.0 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "65" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_84_b2b4a1bf" uuid = "b2b4a1bf" id = "at_84_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "17.07 12.89 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "84" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_85_b2b4a1bf" uuid = "b2b4a1bf" id = "at_85_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "17.06 15.89 21.85" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "85" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_86_b2b4a1bf" uuid = "b2b4a1bf" id = "at_86_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "11.81 9.83 19.42" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "86" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_87_b2b4a1bf" uuid = "b2b4a1bf" id = "at_87_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.38 15.16 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "87" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_88_b2b4a1bf" uuid = "b2b4a1bf" id = "at_88_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 15.16 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "88" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_89_b2b4a1bf" uuid = "b2b4a1bf" id = "at_89_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.74 13.67 21.78" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "89" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_90_b2b4a1bf" uuid = "b2b4a1bf" id = "at_90_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.14 12.12 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "90" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_91_b2b4a1bf" uuid = "b2b4a1bf" id = "at_91_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.77 12.12 19.48" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "91" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_92_b2b4a1bf" uuid = "b2b4a1bf" id = "at_92_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "17.07 15.92 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "92" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_93_b2b4a1bf" uuid = "b2b4a1bf" id = "at_93_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.75 18.16 21.86" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "93" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_94_b2b4a1bf" uuid = "b2b4a1bf" id = "at_94_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.11 13.63 21.81" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "94" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_95_b2b4a1bf" uuid = "b2b4a1bf" id = "at_95_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "14.45 14.38 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "95" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_96_b2b4a1bf" uuid = "b2b4a1bf" id = "at_96_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "14.38 11.32 21.76" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "96" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_97_b2b4a1bf" uuid = "b2b4a1bf" id = "at_97_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.37 16.68 19.43" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "97" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_98_b2b4a1bf" uuid = "b2b4a1bf" id = "at_98_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.13 13.65 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "98" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_99_b2b4a1bf" uuid = "b2b4a1bf" id = "at_99_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 13.65 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "99" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_100_b2b4a1bf" uuid = "b2b4a1bf" id = "at_100_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 16.67 19.43" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "100" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_101_b2b4a1bf" uuid = "b2b4a1bf" id = "at_101_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.37 18.17 21.86" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "101" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_102_b2b4a1bf" uuid = "b2b4a1bf" id = "at_102_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "19.7 17.44 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "102" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_103_b2b4a1bf" uuid = "b2b4a1bf" id = "at_103_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "5.25 9.1 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "103" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_104_b2b4a1bf" uuid = "b2b4a1bf" id = "at_104_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.13 10.61 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "104" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_105_b2b4a1bf" uuid = "b2b4a1bf" id = "at_105_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.88 9.1 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "105" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_106_b2b4a1bf" uuid = "b2b4a1bf" id = "at_106_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "9.19 11.37 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "106" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_107_b2b4a1bf" uuid = "b2b4a1bf" id = "at_107_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.88 10.61 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "107" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_108_b2b4a1bf" uuid = "b2b4a1bf" id = "at_108_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.5 10.61 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "108" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_109_b2b4a1bf" uuid = "b2b4a1bf" id = "at_109_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "11.82 12.89 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "109" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_110_b2b4a1bf" uuid = "b2b4a1bf" id = "at_110_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "6.56 9.85 19.47" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "110" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_111_b2b4a1bf" uuid = "b2b4a1bf" id = "at_111_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.87 12.12 19.48" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "111" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_112_b2b4a1bf" uuid = "b2b4a1bf" id = "at_112_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.49 12.13 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "112" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_113_b2b4a1bf" uuid = "b2b4a1bf" id = "at_113_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.45 18.13 21.77" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "113" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_114_b2b4a1bf" uuid = "b2b4a1bf" id = "at_114_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.17 18.13 21.77" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "114" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_115_b2b4a1bf" uuid = "b2b4a1bf" id = "at_115_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "9.24 11.32 21.76" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "115" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_116_b2b4a1bf" uuid = "b2b4a1bf" id = "at_116_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.88 13.65 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "116" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_117_b2b4a1bf" uuid = "b2b4a1bf" id = "at_117_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.5 13.65 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "117" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_118_b2b4a1bf" uuid = "b2b4a1bf" id = "at_118_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "11.82 15.92 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "118" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_119_b2b4a1bf" uuid = "b2b4a1bf" id = "at_119_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.5 15.16 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "119" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_120_b2b4a1bf" uuid = "b2b4a1bf" id = "at_120_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.13 15.16 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "120" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_121_b2b4a1bf" uuid = "b2b4a1bf" id = "at_121_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "14.44 17.44 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "121" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_122_b2b4a1bf" uuid = "b2b4a1bf" id = "at_122_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "9.19 14.38 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "122" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_123_b2b4a1bf" uuid = "b2b4a1bf" id = "at_123_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.51 16.68 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "123" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_124_b2b4a1bf" uuid = "b2b4a1bf" id = "at_124_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.12 16.68 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "124" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_125_b2b4a1bf" uuid = "b2b4a1bf" id = "at_125_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "7.88 13.67 21.78" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "125" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_126_b2b4a1bf" uuid = "b2b4a1bf" id = "at_126_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.51 13.63 21.81" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "126" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_127_b2b4a1bf" uuid = "b2b4a1bf" id = "at_127_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "11.81 15.88 21.8" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "127" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_128_b2b4a1bf" uuid = "b2b4a1bf" id = "at_128_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.13 9.1 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "128" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_129_b2b4a1bf" uuid = "b2b4a1bf" id = "at_129_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "14.44 11.37 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "129" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_130_b2b4a1bf" uuid = "b2b4a1bf" id = "at_130_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 10.61 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "130" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_131_b2b4a1bf" uuid = "b2b4a1bf" id = "at_131_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.5 9.1 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "131" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_150_b2b4a1bf" uuid = "b2b4a1bf" id = "at_150_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "22.32 3.79 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "150" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_151_b2b4a1bf" uuid = "b2b4a1bf" id = "at_151_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "22.31 6.8 21.85" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "151" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_152_b2b4a1bf" uuid = "b2b4a1bf" id = "at_152_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "17.07 0.73 19.42" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "152" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_153_b2b4a1bf" uuid = "b2b4a1bf" id = "at_153_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.63 6.06 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "153" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_154_b2b4a1bf" uuid = "b2b4a1bf" id = "at_154_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.01 6.06 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "154" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_155_b2b4a1bf" uuid = "b2b4a1bf" id = "at_155_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "20.99 4.58 21.78" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "155" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_156_b2b4a1bf" uuid = "b2b4a1bf" id = "at_156_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.39 3.03 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "156" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_157_b2b4a1bf" uuid = "b2b4a1bf" id = "at_157_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.02 3.02 19.48" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "157" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_158_b2b4a1bf" uuid = "b2b4a1bf" id = "at_158_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "22.32 6.82 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "158" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_159_b2b4a1bf" uuid = "b2b4a1bf" id = "at_159_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.0 9.07 21.86" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "159" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_160_b2b4a1bf" uuid = "b2b4a1bf" id = "at_160_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.36 4.53 21.81" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "160" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_161_b2b4a1bf" uuid = "b2b4a1bf" id = "at_161_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "19.7 5.28 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "161" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_162_b2b4a1bf" uuid = "b2b4a1bf" id = "at_162_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "19.63 2.23 21.76" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "162" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_163_b2b4a1bf" uuid = "b2b4a1bf" id = "at_163_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.62 7.58 19.43" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "163" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_164_b2b4a1bf" uuid = "b2b4a1bf" id = "at_164_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.38 4.55 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "164" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_165_b2b4a1bf" uuid = "b2b4a1bf" id = "at_165_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.01 4.55 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "165" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_166_b2b4a1bf" uuid = "b2b4a1bf" id = "at_166_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.02 7.58 19.43" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "166" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_167_b2b4a1bf" uuid = "b2b4a1bf" id = "at_167_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.62 9.07 21.86" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "167" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_168_b2b4a1bf" uuid = "b2b4a1bf" id = "at_168_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "24.95 8.34 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "168" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_169_b2b4a1bf" uuid = "b2b4a1bf" id = "at_169_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "10.5 0.0 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "169" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_170_b2b4a1bf" uuid = "b2b4a1bf" id = "at_170_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.38 1.52 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "170" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_171_b2b4a1bf" uuid = "b2b4a1bf" id = "at_171_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.13 0.0 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "171" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_172_b2b4a1bf" uuid = "b2b4a1bf" id = "at_172_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "14.44 2.27 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "172" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_173_b2b4a1bf" uuid = "b2b4a1bf" id = "at_173_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.13 1.52 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "173" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_174_b2b4a1bf" uuid = "b2b4a1bf" id = "at_174_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 1.52 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "174" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_175_b2b4a1bf" uuid = "b2b4a1bf" id = "at_175_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "17.07 3.79 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "175" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_176_b2b4a1bf" uuid = "b2b4a1bf" id = "at_176_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "11.82 0.76 19.47" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "176" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_177_b2b4a1bf" uuid = "b2b4a1bf" id = "at_177_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.12 3.02 19.48" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "177" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_178_b2b4a1bf" uuid = "b2b4a1bf" id = "at_178_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.74 3.03 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "178" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_179_b2b4a1bf" uuid = "b2b4a1bf" id = "at_179_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.7 9.03 21.77" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "179" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_180_b2b4a1bf" uuid = "b2b4a1bf" id = "at_180_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.42 9.03 21.77" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "180" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_181_b2b4a1bf" uuid = "b2b4a1bf" id = "at_181_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "14.49 2.22 21.76" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "181" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_182_b2b4a1bf" uuid = "b2b4a1bf" id = "at_182_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.13 4.55 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "182" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_183_b2b4a1bf" uuid = "b2b4a1bf" id = "at_183_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 4.55 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "183" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_184_b2b4a1bf" uuid = "b2b4a1bf" id = "at_184_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "17.07 6.82 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "184" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_185_b2b4a1bf" uuid = "b2b4a1bf" id = "at_185_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 6.06 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "185" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_186_b2b4a1bf" uuid = "b2b4a1bf" id = "at_186_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.38 6.06 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "186" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_187_b2b4a1bf" uuid = "b2b4a1bf" id = "at_187_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "19.7 8.34 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "187" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_188_b2b4a1bf" uuid = "b2b4a1bf" id = "at_188_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "14.44 5.28 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "188" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_189_b2b4a1bf" uuid = "b2b4a1bf" id = "at_189_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 7.58 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "189" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_190_b2b4a1bf" uuid = "b2b4a1bf" id = "at_190_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.37 7.58 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "190" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_191_b2b4a1bf" uuid = "b2b4a1bf" id = "at_191_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "13.13 4.58 21.78" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "191" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_192_b2b4a1bf" uuid = "b2b4a1bf" id = "at_192_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 4.53 21.81" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "192" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_193_b2b4a1bf" uuid = "b2b4a1bf" id = "at_193_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "17.06 6.78 21.8" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "193" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_194_b2b4a1bf" uuid = "b2b4a1bf" id = "at_194_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.38 0.0 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "194" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_195_b2b4a1bf" uuid = "b2b4a1bf" id = "at_195_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "19.7 2.27 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "195" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_196_b2b4a1bf" uuid = "b2b4a1bf" id = "at_196_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.01 1.52 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "196" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_197_b2b4a1bf" uuid = "b2b4a1bf" id = "at_197_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 0.0 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "197" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_216_b2b4a1bf" uuid = "b2b4a1bf" id = "at_216_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "27.57 12.89 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "216" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_217_b2b4a1bf" uuid = "b2b4a1bf" id = "at_217_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "27.56 15.89 21.85" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "217" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_218_b2b4a1bf" uuid = "b2b4a1bf" id = "at_218_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "22.32 9.83 19.42" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "218" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_219_b2b4a1bf" uuid = "b2b4a1bf" id = "at_219_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "28.89 15.16 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "219" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_220_b2b4a1bf" uuid = "b2b4a1bf" id = "at_220_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "26.26 15.16 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "220" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_221_b2b4a1bf" uuid = "b2b4a1bf" id = "at_221_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "26.25 13.67 21.78" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "221" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_222_b2b4a1bf" uuid = "b2b4a1bf" id = "at_222_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.65 12.12 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "222" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_223_b2b4a1bf" uuid = "b2b4a1bf" id = "at_223_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "26.27 12.12 19.48" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "223" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_224_b2b4a1bf" uuid = "b2b4a1bf" id = "at_224_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "27.57 15.92 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "224" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_225_b2b4a1bf" uuid = "b2b4a1bf" id = "at_225_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "26.26 18.16 21.86" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "225" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_226_b2b4a1bf" uuid = "b2b4a1bf" id = "at_226_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.62 13.63 21.81" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "226" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_227_b2b4a1bf" uuid = "b2b4a1bf" id = "at_227_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "24.95 14.38 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "227" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_228_b2b4a1bf" uuid = "b2b4a1bf" id = "at_228_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "24.88 11.32 21.76" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "228" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_229_b2b4a1bf" uuid = "b2b4a1bf" id = "at_229_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "28.87 16.68 19.43" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "229" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_230_b2b4a1bf" uuid = "b2b4a1bf" id = "at_230_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.63 13.65 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "230" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_231_b2b4a1bf" uuid = "b2b4a1bf" id = "at_231_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "26.26 13.65 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "231" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_232_b2b4a1bf" uuid = "b2b4a1bf" id = "at_232_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "26.27 16.67 19.43" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "232" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_233_b2b4a1bf" uuid = "b2b4a1bf" id = "at_233_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "28.87 18.17 21.86" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "233" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_234_b2b4a1bf" uuid = "b2b4a1bf" id = "at_234_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "30.2 17.44 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "234" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_235_b2b4a1bf" uuid = "b2b4a1bf" id = "at_235_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "15.76 9.1 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "235" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_236_b2b4a1bf" uuid = "b2b4a1bf" id = "at_236_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.63 10.61 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "236" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_237_b2b4a1bf" uuid = "b2b4a1bf" id = "at_237_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.38 9.1 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "237" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_238_b2b4a1bf" uuid = "b2b4a1bf" id = "at_238_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "19.7 11.37 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "238" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_239_b2b4a1bf" uuid = "b2b4a1bf" id = "at_239_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.38 10.61 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "239" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_240_b2b4a1bf" uuid = "b2b4a1bf" id = "at_240_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.01 10.61 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "240" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_241_b2b4a1bf" uuid = "b2b4a1bf" id = "at_241_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "22.32 12.89 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "241" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_242_b2b4a1bf" uuid = "b2b4a1bf" id = "at_242_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "17.07 9.85 19.47" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "242" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_243_b2b4a1bf" uuid = "b2b4a1bf" id = "at_243_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.37 12.12 19.48" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "243" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_244_b2b4a1bf" uuid = "b2b4a1bf" id = "at_244_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.0 12.13 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "244" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_245_b2b4a1bf" uuid = "b2b4a1bf" id = "at_245_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "20.95 18.13 21.77" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "245" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_246_b2b4a1bf" uuid = "b2b4a1bf" id = "at_246_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.67 18.13 21.77" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "246" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_247_b2b4a1bf" uuid = "b2b4a1bf" id = "at_247_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "19.75 11.32 21.76" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "247" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_248_b2b4a1bf" uuid = "b2b4a1bf" id = "at_248_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.38 13.65 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "248" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_249_b2b4a1bf" uuid = "b2b4a1bf" id = "at_249_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.01 13.65 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "249" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_250_b2b4a1bf" uuid = "b2b4a1bf" id = "at_250_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "22.32 15.92 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "250" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_251_b2b4a1bf" uuid = "b2b4a1bf" id = "at_251_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.01 15.16 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "251" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_252_b2b4a1bf" uuid = "b2b4a1bf" id = "at_252_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.63 15.16 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "252" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_253_b2b4a1bf" uuid = "b2b4a1bf" id = "at_253_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "24.95 17.44 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "253" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_254_b2b4a1bf" uuid = "b2b4a1bf" id = "at_254_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "19.69 14.38 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "254" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_255_b2b4a1bf" uuid = "b2b4a1bf" id = "at_255_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.02 16.68 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "255" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_256_b2b4a1bf" uuid = "b2b4a1bf" id = "at_256_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.62 16.68 19.4" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "256" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_257_b2b4a1bf" uuid = "b2b4a1bf" id = "at_257_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "18.38 13.67 21.78" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "257" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_258_b2b4a1bf" uuid = "b2b4a1bf" id = "at_258_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.01 13.63 21.81" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "258" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_259_b2b4a1bf" uuid = "b2b4a1bf" id = "at_259_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "22.31 15.88 21.8" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "259" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_260_b2b4a1bf" uuid = "b2b4a1bf" id = "at_260_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "23.63 9.1 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "260" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_261_b2b4a1bf" uuid = "b2b4a1bf" id = "at_261_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "24.95 11.37 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "261" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_262_b2b4a1bf" uuid = "b2b4a1bf" id = "at_262_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "26.26 10.61 17.14" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "262" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+         <Transform DEF = "at_263_b2b4a1bf" uuid = "b2b4a1bf" id = "at_263_b2b4a1bf" radius = "1.22" name = "at_b2b4a1bf" translation = "21.01 9.1 15.0" scale = "1 1 1" > 
+           <Shape kind = "Zn" index = "263" uuid = "b2b4a1bf" > 
+             <Appearance USE = "app_Zn" > 
+             </Appearance> 
+             <Sphere USE = "asp_Zn" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+       </Group> 
+       <Switch id = "switch_marker_0_b2b4a1bf" whichChoice = "-1" > 
+         <Transform id = "marker_0_b2b4a1bf" scale = ".1 .1 .1" translation = "5 0 0" > 
+           <Shape isPickable = "False" > 
+             <Appearance > 
+               <Material diffuseColor = "#FFD966" transparency = "0.5" > 
+               </Material> 
+             </Appearance> 
+             <Sphere radius = "1.0" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+       </Switch> 
+       <Switch id = "switch_marker_1_b2b4a1bf" whichChoice = "-1" > 
+         <Transform id = "marker_1_b2b4a1bf" scale = ".1 .1 .1" translation = "5 0 0" > 
+           <Shape isPickable = "False" > 
+             <Appearance > 
+               <Material diffuseColor = "#FFD966" transparency = "0.5" > 
+               </Material> 
+             </Appearance> 
+             <Sphere radius = "1.0" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+       </Switch> 
+       <Switch id = "switch_marker_2_b2b4a1bf" whichChoice = "-1" > 
+         <Transform id = "marker_2_b2b4a1bf" scale = ".1 .1 .1" translation = "5 0 0" > 
+           <Shape isPickable = "False" > 
+             <Appearance > 
+               <Material diffuseColor = "#FFD966" transparency = "0.5" > 
+               </Material> 
+             </Appearance> 
+             <Sphere radius = "1.0" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+       </Switch> 
+       <Switch id = "switch_marker_3_b2b4a1bf" whichChoice = "-1" > 
+         <Transform id = "marker_3_b2b4a1bf" scale = ".1 .1 .1" translation = "5 0 0" > 
+           <Shape isPickable = "False" > 
+             <Appearance > 
+               <Material diffuseColor = "#FFD966" transparency = "0.5" > 
+               </Material> 
+             </Appearance> 
+             <Sphere radius = "1.0" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+       </Switch> 
+       <Switch id = "switch_marker_4_b2b4a1bf" whichChoice = "-1" > 
+         <Transform id = "marker_4_b2b4a1bf" scale = ".1 .1 .1" translation = "5 0 0" > 
+           <Shape isPickable = "False" > 
+             <Appearance > 
+               <Material diffuseColor = "#FFD966" transparency = "0.5" > 
+               </Material> 
+             </Appearance> 
+             <Sphere radius = "1.0" > 
+             </Sphere> 
+           </Shape> 
+         </Transform> 
+       </Switch> 
+       <Switch id = "switch_line_0_b2b4a1bf" whichChoice = "-1" > 
+         <Shape > 
+           <IndexedLineSet id = "line_ind_0_b2b4a1bf" solid = "false" coordIndex = "0 1 -1" > 
+             <Coordinate id = "line_coor_0_b2b4a1bf" point = "0 0 0 0 0 1" > 
+             </Coordinate> 
+           </IndexedLineSet> 
+           <Appearance > 
+             <Material diffuseColor = "0 0 0" emissiveColor = "0 0.5 1" > 
+             </Material> 
+           </Appearance> 
+         </Shape> 
+       </Switch> 
+       <Switch id = "switch_line_1_b2b4a1bf" whichChoice = "-1" > 
+         <Shape > 
+           <IndexedLineSet id = "line_ind_1_b2b4a1bf" solid = "false" coordIndex = "0 1 -1" > 
+             <Coordinate id = "line_coor_1_b2b4a1bf" point = "0 0 0 0 0 1" > 
+             </Coordinate> 
+           </IndexedLineSet> 
+           <Appearance > 
+             <Material diffuseColor = "0 0 0" emissiveColor = "0 0.5 1" > 
+             </Material> 
+           </Appearance> 
+         </Shape> 
+       </Switch> 
+     </Scene> 
+   </X3D> 
+ </div> 
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.0.min.js" ></script>
+ <script >
+ if (atoms_dict == undefined) {var atoms_dict = {"new": true};}; 
+atoms_dict["b2b4a1bf"] = {com: "15.07 9.07 18.36", 
+top_pos: "15.07 9.07 108.96", 
+front_pos: "15.07 -81.53 18.36", 
+right_pos: "105.67 9.07 18.36", 
+left_pos: "-75.53 9.07 18.36", 
+top_ori: "0 0 0 0", 
+front_ori: "1 0 0 1.57079", 
+right_ori: "0 1 0 1.57079", 
+left_ori: "0 1 0 -1.57079", 
+select: [], 
+uuid: "b2b4a1bf", 
+label: "False", 
+bond: "False", 
+polyhedra: {}, 
+};
+
+// if (atoms_dict[uuid]['new']){
+function setQuality(uuid, quality){
+        // $('#error_'.concat(atoms_dict[uuid]['uuid'])).html('uuid: '.concat(atoms_dict[uuid]["uuid"]));
+        var x3d = 'x3dase_' + uuid;
+        document.getElementById(x3d).setAttribute('PrimitiveQuality', quality);
+    }
+function set_viewpoint(uuid, pos, ori){
+    // $('#error_'.concat(atoms_dict[uuid]['uuid'])).html('uuid: '.concat(atoms_dict[uuid]["uuid"]));
+    var persp = 'camera_persp_' + uuid;
+    var ortho = 'camera_ortho_' + uuid;
+    document.getElementById(persp).setAttribute('orientation', atoms_dict[uuid][ori]);
+    document.getElementById(persp).setAttribute('position', atoms_dict[uuid][pos]);
+    document.getElementById(ortho).setAttribute('orientation', atoms_dict[uuid][ori]);
+    document.getElementById(ortho).setAttribute('position', atoms_dict[uuid][pos]);
+}
+
+//Round a float value to x.xx format
+function roundWithTwoDecimals(value)
+{
+    var x = (Math.round(value * 100)) / 100;
+    var y = x.toFixed(2);
+    return y;
+}
+//Handle click on any group member
+function handleGroupClick(event)
+{
+    //Mark hitting point
+    var target = event.target;
+    var uuid = target.parentNode.getAttribute('uuid')
+    var radius = target.parentNode.getAttribute('radius');
+    var scale = target.parentNode.getAttribute('scale');
+    scale = parseFloat(radius)*parseFloat(scale)*1.2;
+    var scale = ' ' + scale + ' ' + scale + ' ' + scale;
+    var translation = target.parentNode.getAttribute('translation');
+    var id = target.parentNode.getAttribute('id');
+    if (window.event.ctrlKey) {
+        atoms_dict[uuid]['select'].push(id);
+
+    }
+    else {
+        for (var i=1; i<= atoms_dict[uuid]['select'].length; i++) {
+            $('#switch_marker_' + i + '_' + uuid).attr('whichChoice', -1);
+        }
+        atoms_dict[uuid]['select'] = [];
+        atoms_dict[uuid]['select'].push(id);
+        $('#switch_marker_' + 2 + '_' + uuid).attr('whichChoice', -1);
+}
+    var n = atoms_dict[uuid]['select'].length;
+    $('#switch_marker_' + n + '_' + uuid).attr('whichChoice', 0);
+    $('#marker_' + n + '_' + uuid).attr('translation', translation);
+    $('#marker_' + n + '_' + uuid).attr('scale', scale);
+    var atom_kind = '#lastonMouseoverObject_kind_'.concat(uuid);
+    var atom_index = '#lastonMouseoverObject_index_'.concat(uuid);
+    $(atom_kind).html(target.getAttribute("kind"));
+    $(atom_index).html(target.getAttribute("index"));
+    //
+    var coord = translation.split(" ")
+    var atom_position = '#position_'.concat(uuid);
+    var x = roundWithTwoDecimals(coord[0]);
+    var y = roundWithTwoDecimals(coord[1]);
+    var z = roundWithTwoDecimals(coord[2]);
+    var position = 'x = ' + x + ' y = ' + y + ' z = ' + z;
+    $(atom_position).html(position);
+
+    if (atoms_dict[uuid]['select'].length == 2){
+        calculate_distance(uuid);
+        draw_line(uuid);
+    }
+    else if (atoms_dict[uuid]['select'].length == 3){
+        calculate_angle(uuid);
+        draw_line(uuid);
+    }
+
+    console.log(event);
+}
+//Add a onMouseover callback to every shape
+$(document).ready(function(){
+    $("shape").each(function() {
+        // $(this).attr("onMouseover", "handleOnMouseover_shape(this)");
+        // $(this).attr("onclick", "handleClick_shape(this)");
+    });
+    //Add a onMouseover callback to every transform
+    $("transform").each(function() {
+        // $(this).attr("onMouseover", "handleOnMouseover_transform(this)");
+        // $(this).attr("onclick", "handleClick_transform(this)");
+    });
+});
+$(document).on("click", function(e) {
+    if (e.target === document || e.target.tagName === "BODY" || e.target.tagName === "HTML") {
+        $('#marker').attr('scale', "0.0001 0.0001 0.0001");
+    }
+});
+//Handle onMouseover on a shape
+function handleOnMouseover_shape(shape)
+{
+    var atom_kind = '#lastonMouseoverObject_kind_'.concat($(shape).attr("uuid"));
+    var atom_index = '#lastonMouseoverObject_index_'.concat($(shape).attr("uuid"));
+    $(atom_kind).html($(shape).attr("kind"));
+    $(atom_index).html($(shape).attr("index"));
+}
+//Handle onMouseover on a shape
+function handleClick_shape(shape)
+{
+    var atom_kind = '#lastonMouseoverObject_kind_'.concat($(shape).attr("uuid"));
+    var atom_index = '#lastonMouseoverObject_index_'.concat($(shape).attr("uuid"));
+    $(atom_kind).html($(shape).attr("kind"));
+    $(atom_index).html($(shape).attr("index"));
+}
+//Handle onMouseover on a transform
+function handleOnMouseover_transform(transform)
+{
+    var atom_position = '#position_'.concat($(transform).attr("uuid"));
+    var coord = $(transform).attr("translation").split(" "[0]);
+    var x = roundWithTwoDecimals(coord[0]);
+    var y = roundWithTwoDecimals(coord[1]);
+    var z = roundWithTwoDecimals(coord[2]);
+    var position = 'x = ' + x + ' y = ' + y + ' z = ' + z;
+    $(atom_position).html(position);
+}
+
+function calculate_distance(uuid)
+{
+    var measure = '#measure_'.concat(uuid);
+    var c1 = document.getElementById(atoms_dict[uuid]['select'][0]).getAttribute("translation").split(" ");
+    var c2 = document.getElementById(atoms_dict[uuid]['select'][1]).getAttribute("translation").split(" ");
+    r = (c1[0] - c2[0])*(c1[0] - c2[0]) + (c1[1] - c2[1])*(c1[1] - c2[1]) + (c1[2] - c2[2])*(c1[2] - c2[2]);
+    r = roundWithTwoDecimals(Math.sqrt(r));
+    var dist = 'Distance:  ' + r;
+    $(measure).html(dist);
+}
+function calculate_angle(uuid)
+{
+    var measure = '#measure_'.concat(uuid);
+    var c1 = document.getElementById(atoms_dict[uuid]['select'][0]).getAttribute("translation").split(" ");
+    var c2 = document.getElementById(atoms_dict[uuid]['select'][1]).getAttribute("translation").split(" ");
+    var c3 = document.getElementById(atoms_dict[uuid]['select'][2]).getAttribute("translation").split(" ");
+    var AB = Math.sqrt(Math.pow(c2[0]-c1[0],2)+ Math.pow(c2[1]-c1[1],2) + Math.pow(c2[2]-c1[2],2));    
+    var BC = Math.sqrt(Math.pow(c2[0]-c3[0],2)+ Math.pow(c2[1]-c3[1],2) + Math.pow(c2[2]-c3[2],2)); 
+    var AC = Math.sqrt(Math.pow(c3[0]-c1[0],2)+ Math.pow(c3[1]-c1[1],2)+ Math.pow(c3[2]-c1[2],2));
+    var angle = roundWithTwoDecimals(Math.acos((BC*BC+AB*AB-AC*AC)/(2*BC*AB))*180/3.1415926);
+    var angle = 'angle:  ' + angle;
+    $(measure).html(angle);
+}
+function draw_line(uuid)
+{
+    var n = atoms_dict[uuid]['select'].length;
+    var coordIndex = '';
+    var point = document.getElementById(atoms_dict[uuid]['select'][0]).getAttribute("translation");
+    for (var i = 1; i < n; i++) {
+        var c1 = document.getElementById(atoms_dict[uuid]['select'][i]).getAttribute("translation");
+        coordIndex = coordIndex + (i-1) + ' ' + i + ' -1 ';
+        point = point + ' ' + c1 + ' ';
+    }
+    $('#line_coor_' + 0 + '_' + uuid).attr('point', point);
+    $('#line_ind_' + 0 + '_' + uuid).attr('coordIndex', coordIndex);
+    $('#switch_line_' + 0 + '_' + uuid).attr('whichChoice', 0);
+}
+//Handle models
+function spacefilling(uuid)
+{
+    var objs = document.getElementsByName(''.concat('at_'.concat(uuid)));
+    var max=objs.length;
+    for (var i=0; i< max; i++) {
+        objs[i].setAttribute("scale", "1.0, 1.0, 1.0");
+        }
+    document.getElementById('bs_'.concat(uuid)).setAttribute("whichChoice", '-1');
+    document.getElementById('ps_'.concat(uuid)).setAttribute("whichChoice", '-1');
+}
+function ballstick(uuid)
+{
+    if (atoms_dict[uuid]['bond']=='False'){ 
+        alert('Please set bond parameter in your code, e.g. bond=1.0!');
+        $('#error_'.concat(uuid)).html('(^_^) Please set bond parameter in your code, e.g. bond=1.0!');
+		return ;
+    }
+    var objs = document.getElementsByName(''.concat('at_'.concat(uuid)));
+    var max=objs.length;
+    for (var i=0; i< max; i++) {
+        objs[i].setAttribute("scale", "0.6, 0.6, 0.6");
+        }
+    document.getElementById('bs_'.concat(uuid)).setAttribute("whichChoice", '0');
+    document.getElementById('ps_'.concat(uuid)).setAttribute("whichChoice", '-1');
+}
+function polyhedra(uuid)
+{
+    if (atoms_dict[uuid]['polyhedra'].length==0){ 
+        alert('Please set polyhedra parameter in your code, e.g. polyhedra={"Ti": ["O"]}!');
+        $('#error_'.concat(uuid)).html('(^_^) Please set polyhedra parameter in your code, e.g. polyhedra={"Ti": ["O"]}!');
+		return ;
+    }
+    var objs = document.getElementsByName(''.concat('at_'.concat(uuid)));
+    var max=objs.length;
+    for (var i=0; i< max; i++) {
+        objs[i].setAttribute("scale", "0.6, 0.6, 0.6");
+        }
+    document.getElementById('bs_'.concat(uuid)).setAttribute("whichChoice", '0');
+    document.getElementById('ps_'.concat(uuid)).setAttribute("whichChoice", '0');
+}
+function none(uuid)
+{
+    var objs = document.getElementsByName(''.concat('am_'.concat(uuid)));
+    var max=objs.length;
+    for (var i=0; i< max; i++) {
+        objs[i].setAttribute("transparency", "0.0");
+        }
+    document.getElementById('ele_'.concat(uuid)).setAttribute("whichChoice", '-1');
+    document.getElementById('ind_'.concat(uuid)).setAttribute("whichChoice", '-1');
+}
+        
+function element(uuid)
+{
+    if (atoms_dict[uuid]['label']=='False'){ 
+        alert('To show element, please set label=True in your code!');
+        $('#error_'.concat(uuid)).html('(^_^) To show element, please set label=True in your code!');
+		return ;
+	}
+    var objs = document.getElementsByName(''.concat('am_'.concat(uuid)));
+    var max=objs.length;
+    for (var i=0; i< max; i++) {
+        objs[i].setAttribute("transparency", "0.4");
+        }
+    document.getElementById('ele_'.concat(uuid)).setAttribute("whichChoice", '0');
+    document.getElementById('ind_'.concat(uuid)).setAttribute("whichChoice", '-1');
+    document.getElementById('bs_'.concat(uuid)).setAttribute("whichChoice", '-1');
+}
+function index(uuid)
+{
+    if (atoms_dict[uuid]['label']=='False'){ 
+        alert('To show index, please set label=True in your code!');
+        $('#error_'.concat(uuid)).html('(^_^) To show index, please set label=True in your code!');
+		return ;
+	}
+    var objs = document.getElementsByName(''.concat('am_'.concat(uuid)));
+    var max=objs.length;
+    for (var i=0; i< max; i++) {
+        objs[i].setAttribute("transparency", "0.4");
+        }
+    document.getElementById('ind_'.concat(uuid)).setAttribute("whichChoice", '0');
+    document.getElementById('ele_'.concat(uuid)).setAttribute("whichChoice", '-1');
+    document.getElementById('bs_'.concat(uuid)).setAttribute("whichChoice", '-1');
+}
+// } 
+</script> </body>
+</html>

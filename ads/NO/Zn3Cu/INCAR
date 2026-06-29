@@ -1,0 +1,16 @@
+ENCUT = 400
+GGA = RP
+PREC = Normal
+ISMEAR = 1
+SIGMA = 0.1
+NELM = 200
+ISPIN = 1
+ISIF = 2
+EDIFF = 1e-6
+EDIFFG = -0.01
+IBRION = 2
+LWAVE = .False.
+LCHARG = .False.
+NSW = 200
+ALGO = Normal
+LREAL = .False.

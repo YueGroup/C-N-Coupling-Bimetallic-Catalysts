@@ -1,0 +1,20 @@
+SYSTEM  = TS_single_point
+  
+ENCUT = 400
+GGA = RP
+ISMEAR = 1
+SIGMA = 0.1
+NELM = 200
+ISPIN = 1
+ISIF = 2
+EDIFF = 1e-6
+EDIFFG = -0.01
+IBRION = -1   #no ionic relaxation
+NSW = 0    # zero ionic steps
+
+ALGO = Normal
+LREAL = Auto
+
+LWAVE = .FALSE.
+LCHARG = .FALSE.
+

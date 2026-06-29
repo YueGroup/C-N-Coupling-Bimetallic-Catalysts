@@ -1,0 +1,479 @@
+ running on   64 total cores
+ distrk:  each k-point on   64 cores,    1 groups
+ distr:  one band on    1 cores,   64 groups
+ vasp.6.2.1 16May21 (build Apr 21 2023 09:04:52) complex                         
+ POSCAR found type information on POSCAR AuN O Zn
+ POSCAR found :  4 types and      66 ions
+ scaLAPACK will be used
+ -----------------------------------------------------------------------------
+|                                                                             |
+|           W    W    AA    RRRRR   N    N  II  N    N   GGGG   !!!           |
+|           W    W   A  A   R    R  NN   N  II  NN   N  G    G  !!!           |
+|           W    W  A    A  R    R  N N  N  II  N N  N  G       !!!           |
+|           W WW W  AAAAAA  RRRRR   N  N N  II  N  N N  G  GGG   !            |
+|           WW  WW  A    A  R   R   N   NN  II  N   NN  G    G                |
+|           W    W  A    A  R    R  N    N  II  N    N   GGGG   !!!           |
+|                                                                             |
+|     For optimal performance we recommend to set                             |
+|       NCORE = 2 up to number-of-cores-per-socket                            |
+|     NCORE specifies how many cores store one orbital (NPAR=cpu/NCORE).      |
+|     This setting can greatly improve the performance of VASP for DFT.       |
+|     The default, NCORE=1 might be grossly inefficient on modern             |
+|     multi-core architectures or massively parallel machines. Do your        |
+|     own testing! More info at https://www.vasp.at/wiki/index.php/NCORE      |
+|     Unfortunately you need to use the default for GW and RPA                |
+|     calculations (for HF NCORE is supported but not extensively tested      |
+|     yet).                                                                   |
+|                                                                             |
+ -----------------------------------------------------------------------------
+
+ -----------------------------------------------------------------------------
+|                                                                             |
+|               ----> ADVICE to this user running VASP <----                  |
+|                                                                             |
+|     You have a (more or less) 'large supercell' and for larger cells it     |
+|     might be more efficient to use real-space projection operators.         |
+|     Therefore, try LREAL= Auto in the INCAR file.                           |
+|     Mind: For very accurate calculation, you might also keep the            |
+|     reciprocal projection scheme (i.e. LREAL=.FALSE.).                      |
+|                                                                             |
+ -----------------------------------------------------------------------------
+
+ -----------------------------------------------------------------------------
+|                                                                             |
+|               ----> ADVICE to this user running VASP <----                  |
+|                                                                             |
+|     You enforced a specific xc type in the INCAR file but a different       |
+|     type was found in the POTCAR file.                                      |
+|     I HOPE YOU KNOW WHAT YOU ARE DOING!                                     |
+|                                                                             |
+ -----------------------------------------------------------------------------
+
+ LDA part: xc-table for Pade appr. of Perdew
+ POSCAR, INCAR and KPOINTS ok, starting setup
+ FFT: planning ...
+ WAVECAR not read
+ entering main loop
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1     0.461013224612E+04    0.46101E+04   -0.29273E+05 24576   0.117E+03
+DAV:   2     0.346637073714E+03   -0.42635E+04   -0.40206E+04 24704   0.302E+02
+DAV:   3    -0.920081979442E+02   -0.43865E+03   -0.42367E+03 30208   0.112E+02
+DAV:   4    -0.103821857936E+03   -0.11814E+02   -0.11696E+02 27648   0.177E+01
+DAV:   5    -0.104000115919E+03   -0.17826E+00   -0.17822E+00 35712   0.165E+00    0.302E+01
+DAV:   6    -0.999732070976E+02    0.40269E+01   -0.13031E+02 36736   0.273E+01    0.266E+01
+DAV:   7    -0.949880304697E+02    0.49852E+01   -0.19125E+01 33792   0.307E+01    0.172E+01
+DAV:   8    -0.991237935137E+02   -0.41358E+01   -0.48758E+01 37888   0.428E+01    0.138E+01
+DAV:   9    -0.943349744815E+02    0.47888E+01   -0.22473E+01 42560   0.274E+01    0.552E+00
+DAV:  10    -0.928064465754E+02    0.15285E+01   -0.67745E+00 30336   0.144E+01    0.177E+00
+DAV:  11    -0.929364811844E+02   -0.13003E+00   -0.14697E+00 27584   0.300E+00    0.924E-01
+DAV:  12    -0.929444618741E+02   -0.79807E-02   -0.10340E-01 31744   0.109E+00    0.950E-01
+DAV:  13    -0.929421627086E+02    0.22992E-02   -0.38460E-02 35072   0.558E-01    0.475E-01
+DAV:  14    -0.929482298735E+02   -0.60672E-02   -0.43099E-02 30528   0.123E+00    0.552E-01
+DAV:  15    -0.929440873901E+02    0.41425E-02   -0.16529E-02 30272   0.603E-01    0.141E-01
+DAV:  16    -0.929448334592E+02   -0.74607E-03   -0.23417E-03 27456   0.212E-01    0.109E-01
+DAV:  17    -0.929453322164E+02   -0.49876E-03   -0.12504E-03 26944   0.870E-02    0.663E-02
+DAV:  18    -0.929457498279E+02   -0.41761E-03   -0.20344E-04 28992   0.990E-02    0.225E-02
+DAV:  19    -0.929460411771E+02   -0.29135E-03   -0.14367E-04 27008   0.245E-02    0.162E-02
+DAV:  20    -0.929461483708E+02   -0.10719E-03   -0.13602E-05 27648   0.122E-02    0.985E-03
+DAV:  21    -0.929463760561E+02   -0.22769E-03   -0.25845E-05 26880   0.157E-02    0.112E-02
+DAV:  22    -0.929465021866E+02   -0.12613E-03   -0.13982E-05 27648   0.732E-03    0.441E-03
+DAV:  23    -0.929465831150E+02   -0.80928E-04   -0.59403E-06 26368   0.614E-03    0.318E-03
+DAV:  24    -0.929466579134E+02   -0.74798E-04   -0.68611E-06 25792   0.338E-03    0.283E-03
+DAV:  25    -0.929466736722E+02   -0.15759E-04   -0.76543E-07 20544   0.288E-03    0.143E-03
+DAV:  26    -0.929466843024E+02   -0.10630E-04   -0.48464E-07 19904   0.220E-03    0.664E-04
+DAV:  27    -0.929466906372E+02   -0.63348E-05   -0.14059E-07 18240   0.105E-03    0.473E-04
+DAV:  28    -0.929466941185E+02   -0.34813E-05   -0.53125E-08 18368   0.111E-03    0.311E-04
+DAV:  29    -0.929466962729E+02   -0.21544E-05   -0.30131E-08 18432   0.738E-04    0.245E-04
+DAV:  30    -0.929466979791E+02   -0.17061E-05   -0.22127E-08 18176   0.610E-04    0.166E-04
+DAV:  31    -0.929466985870E+02   -0.60793E-06   -0.10466E-08 18432   0.407E-04
+   1 F= -.92946699E+02 E0= -.92944226E+02  d E =-.929467E+02
+ curvature:   0.00 expect dE= 0.000E+00 dE for cont linesearch  0.000E+00
+ trial: gam= 0.00000 g(F)=  0.575E-04 g(S)=  0.000E+00 ort = 0.000E+00 (trialstep = 0.100E+01)
+ search vector abs. value=  0.575E-04
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.929467194704E+02   -0.21491E-04   -0.13984E-02 26816   0.167E-01    0.286E-02
+DAV:   2    -0.929468424655E+02   -0.12300E-03   -0.78350E-04 28864   0.631E-02    0.957E-02
+DAV:   3    -0.929467101365E+02    0.13233E-03   -0.43619E-04 29312   0.679E-02    0.145E-02
+DAV:   4    -0.929467341863E+02   -0.24050E-04   -0.30968E-05 26816   0.329E-02    0.126E-02
+DAV:   5    -0.929467340822E+02    0.10409E-06   -0.10283E-05 27456   0.313E-02    0.715E-03
+DAV:   6    -0.929467340529E+02    0.29361E-07   -0.54156E-06 26432   0.152E-02
+   2 F= -.92946734E+02 E0= -.92944267E+02  d E =-.354659E-04
+ trial-energy change:   -0.000035  1 .order   -0.000032   -0.000057   -0.000007
+ step:   1.1375(harm=  1.1375)  dis= 0.00070  next Energy=   -92.946731 (dE=-0.327E-04)
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.929467350038E+02   -0.92155E-06   -0.26714E-04 27456   0.235E-02    0.460E-03
+DAV:   2    -0.929467375402E+02   -0.25364E-05   -0.17151E-05 29248   0.964E-03    0.143E-02
+DAV:   3    -0.929467348161E+02    0.27241E-05   -0.10562E-05 27328   0.108E-02    0.194E-03
+DAV:   4    -0.929467353681E+02   -0.55203E-06   -0.87067E-07 23040   0.621E-03
+   3 F= -.92946735E+02 E0= -.92944269E+02  d E =-.367811E-04
+ curvature:  -0.57 expect dE=-0.103E-03 dE for cont linesearch -0.595E-09
+ trial: gam= 3.14489 g(F)=  0.181E-03 g(S)=  0.000E+00 ort = 0.245E-06 (trialstep = 0.786E-01)
+ search vector abs. value=  0.751E-03
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.929467481817E+02   -0.13366E-04   -0.11305E-03 25344   0.480E-02    0.446E-03
+DAV:   2    -0.929467509915E+02   -0.28098E-05   -0.21183E-05 27392   0.820E-03    0.102E-02
+DAV:   3    -0.929467495416E+02    0.14499E-05   -0.61438E-06 23424   0.628E-03    0.252E-03
+DAV:   4    -0.929467498133E+02   -0.27169E-06   -0.98502E-07 18752   0.818E-03
+   4 F= -.92946750E+02 E0= -.92944283E+02  d E =-.144452E-04
+ ZBRENT: can't locate minimum, use default step
+ trial-energy change:   -0.000014  1 .order   -0.000013   -0.000014   -0.000012
+ step:   0.3145(harm=  0.5869)  dis= 0.00075  next Energy=   -92.946789 (dE=-0.533E-04)
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.929467695661E+02   -0.20024E-04   -0.10175E-02 24832   0.143E-01    0.122E-02
+DAV:   2    -0.929467909762E+02   -0.21410E-04   -0.16958E-04 26176   0.330E-02    0.286E-02
+DAV:   3    -0.929467795198E+02    0.11456E-04   -0.51628E-05 27072   0.282E-02    0.656E-03
+DAV:   4    -0.929467815503E+02   -0.20305E-05   -0.47994E-06 22656   0.120E-02    0.557E-03
+DAV:   5    -0.929467818304E+02   -0.28006E-06   -0.36038E-06 22016   0.212E-02
+   5 F= -.92946782E+02 E0= -.92944317E+02  d E =-.464623E-04
+ curvature:  -0.86 expect dE=-0.412E-04 dE for cont linesearch -0.923E-05
+ ZBRENT: increasing intervall
+ opt :   0.7864  next Energy=   -92.946792 (dE=-0.567E-04)
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.929467492686E+02    0.32282E-04   -0.40672E-02 24704   0.286E-01    0.240E-02
+DAV:   2    -0.929468305627E+02   -0.81294E-04   -0.67634E-04 26368   0.439E-02    0.550E-02
+DAV:   3    -0.929467907179E+02    0.39845E-04   -0.18428E-04 27328   0.470E-02    0.130E-02
+DAV:   4    -0.929467977791E+02   -0.70612E-05   -0.21489E-05 25536   0.350E-02    0.110E-02
+DAV:   5    -0.929467980473E+02   -0.26820E-06   -0.14472E-05 25408   0.392E-02    0.704E-03
+DAV:   6    -0.929467967176E+02    0.13297E-05   -0.73406E-06 26112   0.247E-02    0.166E-03
+DAV:   7    -0.929467968987E+02   -0.18109E-06   -0.23430E-06 27200   0.409E-03
+   6 F= -.92946797E+02 E0= -.92944330E+02  d E =-.615306E-04
+ curvature:  -0.96 expect dE=-0.336E-04 dE for cont linesearch -0.248E-05
+ ZBRENT: bracketing found
+ ZBRENT: interpolating
+ opt :   0.6307  next Energy=   -92.946800 (dE=-0.650E-04)
+ bond charge predicted
+       N       E                     dE             d eps       ncg     rms          rms(c)
+DAV:   1    -0.929467936699E+02    0.30476E-05   -0.44247E-03 24704   0.943E-02    0.741E-03
+DAV:   2    -0.929468019422E+02   -0.82723E-05   -0.70920E-05 26496   0.147E-02    0.174E-02
+DAV:   3    -0.929467981067E+02    0.38355E-05   -0.17161E-05 27392   0.144E-02    0.429E-03
+DAV:   4    -0.929467988163E+02   -0.70959E-06   -0.19255E-06 22144   0.998E-03
+   7 F= -.92946799E+02 E0= -.92944332E+02  d E =-.634482E-04
+ curvature:  -1.33 expect dE=-0.180E-04 dE for cont linesearch -0.111E-06
+ trial: gam= 0.08234 g(F)=  0.136E-04 g(S)=  0.000E+00 ort = 0.793E-05 (trialstep = 0.189E+00)
+ search vector abs. value=  0.200E-04
+ reached required accuracy - stopping structural energy minimisation
+Warning: ieee_invalid is signaling
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
+Warning: ieee_invalid is signaling
+Warning: ieee_divide_by_zero is signaling
+Warning: ieee_underflow is signaling
+Warning: ieee_inexact is signaling
+FORTRAN STOP
