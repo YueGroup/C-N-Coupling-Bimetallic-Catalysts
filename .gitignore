@@ -1,0 +1,27 @@
+# Large VASP output files
+**/OUTCAR
+**/CHGCAR
+**/CHG
+**/CHGCAR_sum
+**/AECCAR0
+**/AECCAR1
+**/AECCAR2
+**/WAVECAR
+**/vasprun.xml
+
+# VASP licensed files
+**/POTCAR
+
+# macOS
+.DS_Store
+._*
+
+
+
+
+
+
+
+
+:q!
+

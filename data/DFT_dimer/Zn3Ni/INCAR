@@ -1,0 +1,33 @@
+SYSTEM  = DFT Dimer
+
+GGA     = RP
+LCHARG  = .FALSE.
+LWAVE   = .FALSE.
+
+ENCUT   = 400
+EDIFF   = 1.0E-6
+EDIFFG  = -0.02
+
+NCORE = 8
+ISYM = 0
+
+ALGO    = Normal
+IBRION  = 3
+ISIF    = 2
+ISMEAR  = 1
+SIGMA   = 0.1
+ISPIN   = 1
+LREAL = .FALSE.
+
+ICHAIN  = 2      # indicate which method to run . NEB (ICHAIN=0) DIMER (ICHAIN=2)
+IOPT    = 2      # FORCED based CG (conjugate Gradient) method
+POTIM   = 0.0   
+
+# DIMER PARAMETERS
+DdR=0.005
+DRotMax=4
+DFNMin=0.01
+DFNMax=1.0
+
+NELM    = 200
+NSW     = 700
