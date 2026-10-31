@@ -1,0 +1,27 @@
+ENCUT = 400
+GGA = RP
+PREC = Accurate
+
+ISMEAR = 0
+SIGMA = 0.05
+
+NELM = 200
+ISPIN = 1
+
+EDIFF = 1E-8
+EDIFFG = -0.01
+
+LWAVE = .FALSE.
+LCHARG = .FALSE.
+
+ALGO = Normal
+LREAL = .FALSE.
+
+NCORE = 8
+
+IBRION = 5
+NFREE = 2
+POTIM = 0.015
+NSW = 1
+
+ISYM = 0
